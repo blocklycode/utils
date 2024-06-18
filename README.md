@@ -1,6 +1,33 @@
 # utils
 Common components, scripts, etc that are used throughout Blockly Code
 
+## Use
+
+#### Step 1: `package.json`
+
+We are using Bun for Blockly Code, so you will add the import like so:
+
+```json
+{
+  "dependencies": {
+    "blockly": "github:blocklycode/utils"
+  }
+}
+```
+
+### Step 2: install
+
+Install using `bun install` or `bun i`
+
+### Step 3: import
+
+```js
+import { thing } from 'blockly';
+
+//Ex
+import { db } from 'blockly';
+import { User} from "blockly/components";
+```
 
 ## `db`
 
