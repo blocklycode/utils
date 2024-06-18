@@ -1,0 +1,19 @@
+---
+
+import db from "../db";
+
+export interface Props {
+    username: string;
+}
+
+const { username } = Astro.props;
+
+const user = await db.users.findOne({ username });
+
+
+---
+
+<div>
+    <p>{user.username}</p>
+    <img src={user.avatar} alt={user.username} />
+</div>

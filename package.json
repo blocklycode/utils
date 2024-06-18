@@ -1,6 +1,6 @@
 {
-  "name": "blockly-utils",
-  "version": "0.0.2",
+  "name": "blockly",
+  "version": "0.0.3",
   "main": "src/index.ts",
   "type": "module",
   "devDependencies": {
