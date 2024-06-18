@@ -69,7 +69,6 @@ export type CollectionOptions = {
     data_source: string;
     database: string;
     collection: DBCollection;
-    document_type: any;
 }
 
 class Collection {
@@ -78,7 +77,6 @@ class Collection {
     private data_source: string;
     public database: string;
     public collection: DBCollection;
-    public document_type: any;
 
     constructor(options:CollectionOptions) {
         this.api_key = options.api_key;
@@ -86,8 +84,6 @@ class Collection {
         this.data_source = options.data_source;
         this.database = options.database;
         this.collection = options.collection;
-        this.document_type = options.document_type;
-        type documentType = typeof this.document_type;
     };
 
     /**
@@ -247,8 +243,14 @@ class Collection {
 const collections:{[key:string]:Collection} = {};
 
 for (const x of Object.keys(DBCollection)) {
-    /* @ts-ignore */
-    collections[x.toString()] = new Collection(DBCollection[x]);
+    collections[x.toString()] = new Collection({
+        api_key: process.env.DB_KEY!,
+        api_url: process.env.DB_URL!,
+        data_source: process.env.DB_SOURCE!,
+        database: process.env.DB_NAME!,
+        /* @ts-ignore */
+        collection: DBCollection[x],
+    });
 }
 
 export default collections;
