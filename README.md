@@ -10,7 +10,7 @@ We are using Bun for Blockly Code, so you will add the import like so:
 ```json
 {
   "dependencies": {
-    "blockly": "github:blocklycode/utils"
+    "blocklycode": "github:blocklycode/utils"
   }
 }
 ```
@@ -25,8 +25,8 @@ Install using `bun install` or `bun i`
 import { thing } from 'blockly';
 
 //Ex
-import { db } from 'blockly';
-import { User} from "blockly/components";
+import { db } from 'blocklycode';
+import { User } from "blocklycode/components";
 ```
 
 ## `db`
@@ -34,7 +34,9 @@ import { User} from "blockly/components";
 Can be used to interact with the database.
 
 ```js
-import { db } from '@blockly/utils';
+import { db } from 'blocklycode';
+//or
+import { users } from "blocklycode/db";
 
 const user = await db.users.findOne({ email: "example@blocklycode.org" });
 
@@ -61,3 +63,45 @@ console.log(new_user);//"6193504e1be4ab27791c8133"
 - `deleteOne`
 - `deleteMany`
 - `aggregate`
+
+## `components`
+
+Provides many useful components for use in the frontend
+
+```astro
+
+---
+import { User, Dropdown } from "blocklycode/components";
+//or
+import {components} from "blocklycode";
+
+const options = [
+    {label: "One", type: "link", href: "https://blocklycode.org"},
+    {label: "Two", type: "button", id: "twoButton"}
+];
+
+---
+
+<div>
+    <User username="blocklycode" />
+    <hr />
+    <Dropdown options={options} label="Dropdown" />
+</div>
+
+```
+
+**Components**
+
+- `User`
+- `Dropdown`
+- `Modal`
+- `Confirm`
+- `ExternalLink`
+- `PageError`
+- `Header`
+- `Footer`
+- `Head`
+- `Input` (provides text, select, checkbox, radio, toggle, color picker, uplaod, etc)
+- `CommentSection`
+- `Filters` (also includes sort and search)
+

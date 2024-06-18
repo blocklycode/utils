@@ -1,7 +1,7 @@
 {
-  "name": "blockly",
-  "version": "0.0.4",
-  "main": "src/index.ts",
+  "name": "blocklycode",
+  "version": "0.1.0",
+  "main": "index.ts",
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest",
