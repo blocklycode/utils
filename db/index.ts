@@ -1,3 +1,5 @@
+import * as types from "../types";
+
 export enum DBActionType {
     createOne = "insertOne",
     createMany = "insertMany",
@@ -63,6 +65,49 @@ enum DBCollection {
     templates = "templates",
     users = "users",
 }
+
+type CollectionType<T> =
+    T extends DBCollection.announcements ? types.announcement.Announcement :
+    T extends DBCollection.appeals ? types.appeal.Appeal :
+    T extends DBCollection.applications ? types.application.Application :
+    T extends DBCollection.audit_log ? types.audit_log.Action :
+    T extends DBCollection.blocklets ? types.blocklet.Blocklet :
+    T extends DBCollection.bug_reports ? types.bug_report.Report :
+    T extends DBCollection.documentation ? types.documentation.Page :
+    T extends DBCollection.experiments ? types.experiment.Experiment :
+    T extends DBCollection.feedback ? types.feedback.Post :
+    T extends DBCollection.lessons ? types.lesson.Lesson :
+    T extends DBCollection.positions ? types.position.Position :
+    T extends DBCollection.projects ? types.project.Project :
+    T extends DBCollection.support_articles ? types.support.Article :
+    T extends DBCollection.support_posts ? types.support.Post :
+    T extends DBCollection.support_tickets ? types.support.Ticket :
+    T extends DBCollection.teams ? types.team.Team :
+    T extends DBCollection.templates ? types.template.Template :
+    T extends DBCollection.users ? types.user.User :
+    never;
+
+type CollectionType2 = {
+    announcements: types.announcement.Announcement;
+    appeals: types.appeal.Appeal;
+    applications: types.application.Application;
+    audit_log: types.audit_log.Action;
+    blocklets: types.blocklet.Blocklet;
+    bug_reports: types.bug_report.Report;
+    documentation: types.documentation.Page;
+    experiments: types.experiment.Experiment;
+    feedback: types.feedback.Post;
+    lessons: types.lesson.Lesson;
+    positions: types.position.Position;
+    projects: types.project.Project;
+    support_articles: types.support.Article;
+    support_posts: types.support.Post;
+    support_tickets: types.support.Ticket;
+    teams: types.team.Team;
+    templates: types.template.Template;
+    users: types.user.User;
+}
+
 export type CollectionOptions = {
     api_key: string;
     api_url: string;
@@ -71,7 +116,7 @@ export type CollectionOptions = {
     collection: DBCollection;
 }
 
-class Collection {
+class Collection<DocType> {
     private api_key: string;
     private api_url: string;
     private data_source: string;
@@ -91,10 +136,10 @@ class Collection {
      * 
      * @param {DBActionType} action - The type of action to perform
      * @param {DBRequestData} data - The data to send with the request
-     * @returns {Promise<any>} - A promise that resolves to the response from the MongoDB Data API
+     * @returns A promise that resolves to the response from the MongoDB Data API
      * @throws {Error} - If an error occurs during the request
      */
-    private async createRequest(action:DBActionType, data:DBRequestData) {
+    private async createRequest(action:DBActionType, data:DBRequestData):Promise<any> {
         const request = await fetch(`${this.api_url}/action/${action}`, {
             method: 'POST',
             headers: {
@@ -124,9 +169,9 @@ class Collection {
      * Insert a single document into a collection.
      * 
      * @param {KeyValue} document - A document to insert into the collection
-     * @returns {Promise<string>} - A promise that resolves to the `_id` value of the inserted document
+     * @returns A promise that resolves to the `_id` value of the inserted document
      */
-    public async createOne(document:KeyValue) {
+    public async createOne(document:KeyValue):Promise<string> {
         const result = await this.createRequest(DBActionType.createOne, {document});
         return result?.data?.insertedId ?? null;
     };
@@ -134,9 +179,9 @@ class Collection {
      * Insert multiple documents into a collection.
      * 
      * @param {KeyValue[]} documents - A list of documents to insert into the collection.
-     * @returns {Promise<string[]>} - A promise that resolves to a list of the `_id` values of the inserted documents.
+     * @returns A promise that resolves to a list of the `_id` values of the inserted documents.
      */
-    public async createMany(documents:KeyValue[]) {
+    public async createMany(documents:KeyValue[]):Promise<string[]> {
         const result = await this.createRequest(DBActionType.createMany, {documents});
         return result?.data?.insertedIds ?? [];
     };
@@ -146,15 +191,18 @@ class Collection {
      * @param {KeyValue} filter - A MongoDB query filter that matches documents. For a list of all query operators that the Data API supports, see [Query Operators](https://www.mongodb.com/docs/atlas/app-services/mongodb/crud-and-aggregation-apis/#query-operators).
      * @param {KeyValue} update - A MongoDB update expression to apply to matching documents. For a list of all update operators that the Data API supports, see [Update Operators](https://www.mongodb.com/docs/atlas/app-services/mongodb/crud-and-aggregation-apis/#update-operators).
      * @param {boolean} [upsert=false] - When true, if the update filter does not match any existing documents, then insert a new document based on the filter and the specified update operation.
-     * @returns {Promise<{matchedCount: number, modifiedCount: number, upsertedId?: string}>} - A promise that resolves to an object containing the number of documents that were matched by the query, the number of documents that were modified by the update operation, and the `_id` of the upserted document, if any.
+     * @returns A promise that resolves to an object containing the number of documents that were matched by the query, the number of documents that were modified by the update operation, and the `_id` of the upserted document, if any.
      */
-    public async updateOne(filter:KeyValue, update:KeyValue, upsert?:boolean) {
+    public async updateOne(filter:KeyValue, update:KeyValue, upsert?:boolean):Promise<{matchedCount: number, modifiedCount: number, upsertedId?: string}> {
         const result = await this.createRequest(DBActionType.updateOne, {filter, update, upsert});
         return result?.data ? {
             matchedCount: result.data.matchedCount,
             modifiedCount: result.data.modifiedCount,
             upsertedId: result.data.upsertedId,
-        } : {};
+        } : {
+            matchedCount: 0,
+            modifiedCount: 0,
+        };
     };
     /**
      * Update multiple documents in a collection.
@@ -162,24 +210,27 @@ class Collection {
      * @param {KeyValue} filter - A MongoDB query filter that matches documents. For a list of all query operators that the Data API supports, see [Query Operators](https://www.mongodb.com/docs/atlas/app-services/mongodb/crud-and-aggregation-apis/#query-operators).
      * @param {KeyValue} update - A MongoDB update expression to apply to matching documents. For a list of all update operators that the Data API supports, see [Update Operators](https://www.mongodb.com/docs/atlas/app-services/mongodb/crud-and-aggregation-apis/#update-operators).
      * @param {boolean} [upsert=false] - When true, if the update filter does not match any existing documents, then insert a new document based on the filter and the specified update operation.
-     * @returns {Promise<{matchedCount: number, modifiedCount: number, upsertedId?: string}>} - A promise that resolves to an object containing the number of documents that were matched by the query, the number of documents that were modified by the update operation, and the `_id` of the upserted document, if any.
+     * @returns A promise that resolves to an object containing the number of documents that were matched by the query, the number of documents that were modified by the update operation, and the `_id` of the upserted document, if any.
      */
-    public async updateMany(filter:KeyValue, update:KeyValue, upsert?:boolean) {
+    public async updateMany(filter:KeyValue, update:KeyValue, upsert?:boolean):Promise<{matchedCount: number, modifiedCount: number, upsertedId?: string}> {
         const result = await this.createRequest(DBActionType.updateMany, {filter, update, upsert});
         return result?.data ? {
             matchedCount: result.data.matchedCount,
             modifiedCount: result.data.modifiedCount,
             upsertedId: result.data.upsertedId,
-        } : {};
+        } : {
+            matchedCount: 0,
+            modifiedCount: 0,
+        };
     };
     /**
      * Replace a single document that matches a query.
      * 
      * @param {KeyValue} filter - A MongoDB query filter that matches documents. For a list of all query operators that the Data API supports, see [Query Operators](https://www.mongodb.com/docs/atlas/app-services/mongodb/crud-and-aggregation-apis/#query-operators).
      * @param {KeyValue} replacement - Replacement data or smth idrk cuase it wasnt in the docs :skull:
-     * @returns {Promise<KeyValue>} - A promise that resolves to the first document that matches the query, or null if no documents match the query.
+     * @returns A promise that resolves to the first document that matches the query, or null if no documents match the query.
      */
-    public async replaceOne(filter:KeyValue, replacement:KeyValue) {
+    public async replaceOne(filter:KeyValue, replacement:KeyValue):Promise<DocType> {
         const result = await this.createRequest(DBActionType.replaceOne, {filter, replacement});
         return result?.data?.document ?? null;
     };
@@ -187,9 +238,9 @@ class Collection {
      * Delete a single document that matches a query.
      * 
      * @param {KeyValue} filter - A MongoDB query filter that matches documents. For a list of all query operators that the Data API supports, see [Query Operators](https://www.mongodb.com/docs/atlas/app-services/mongodb/crud-and-aggregation-apis/#query-operators).
-     * @returns {Promise<number>} - A promise that resolves to the number of documents that were deleted.
+     * @returns A promise that resolves to the number of documents that were deleted.
      */
-    public async deleteOne(filter:KeyValue) {
+    public async deleteOne(filter:KeyValue):Promise<number> {
         const result = await this.createRequest(DBActionType.deleteOne, {filter});
         return result?.data?.deletedCount ?? null;
     };
@@ -197,20 +248,20 @@ class Collection {
      * Delete multiple documents that match a query.
      * 
      * @param {KeyValue} filter - A MongoDB query filter that matches documents. For a list of all query operators that the Data API supports, see [Query Operators](https://www.mongodb.com/docs/atlas/app-services/mongodb/crud-and-aggregation-apis/#query-operators).
-     * @returns {Promise<number>} - A promise that resolves to the number of documents that were deleted.
+     * @returns A promise that resolves to the number of documents that were deleted.
      */
-    public async deleteMany(filter:KeyValue) {
+    public async deleteMany(filter:KeyValue):Promise<number> {
         const result = await this.createRequest(DBActionType.deleteMany, {filter});
-        return result?.data?.deletedCount ?? null;
+        return result?.data?.deletedCount ?? 0;
     };
     /**
      * Find a single document that matches a query.
      * 
      * @param {KeyValue} filter - A MongoDB query filter that matches documents. For a list of all query operators that the Data API supports, see [Query Operators](https://www.mongodb.com/docs/atlas/app-services/mongodb/crud-and-aggregation-apis/#query-operators).
      * @param {ProjectionKV} [projection] - A [MongoDB projection](https://www.mongodb.com/docs/manual/tutorial/project-fields-from-query-results/) for matched documents returned by the operation.
-     * @returns {Promise<KeyValue>} - A promise that resolves to the first document that matches the query, or null if no documents match the query.
+     * @returns A promise that resolves to the first document that matches the query, or null if no documents match the query.
     */
-    public async findOne(filter:KeyValue, projection?:ProjectionKV) {
+    public async findOne(filter:KeyValue, projection?:ProjectionKV):Promise<DocType> {
         const result = await this.createRequest(DBActionType.findOne, {filter, projection});
         return result?.data?.document ?? null;
     };
@@ -222,9 +273,9 @@ class Collection {
      * @param {KeyValue} [sort] - A [MongoDB sort expression](https://www.mongodb.com/docs/manual/reference/method/cursor.sort/) that indicates sorted field names and directions.
      * @param {number} [limit] - The maximum number of matching documents to include the in the response.
      * @param {number} [skip] - The number of matching documents to omit from the response.
-     * @returns {Promise<KeyValue>} - A promise that resolves to the first document that matches the query, or null if no documents match the query.
+     * @returns A promise that resolves to an array of documents that match the query.
      */
-    public async findMany(filter:KeyValue, projection?:ProjectionKV, sort?:KeyValue, limit?:number, skip?:number) {
+    public async findMany(filter:KeyValue, projection?:ProjectionKV, sort?:KeyValue, limit?:number, skip?:number):Promise<DocType[]> {
         const result = await this.createRequest(DBActionType.findMany, {filter, projection, sort, limit, skip});
         return result?.data?.documents ?? [];
     };
@@ -232,25 +283,31 @@ class Collection {
      * Run an aggregation pipeline.
      * 
      * @param {KeyValue[]} pipeline - An array of aggregation stages.
-     * @returns {Promise<KeyValue>} - A promise that resolves to an array that contains the result set of the aggregation.
+     * @returns A promise that resolves to an array that contains the result set of the aggregation.
      */
-    public async aggregate(pipeline:KeyValue[]) {
+    public async aggregate(pipeline:KeyValue[]):Promise<KeyValue[]> {
         const result = await this.createRequest(DBActionType.aggregate, {pipeline});
         return result?.data?.documents ?? [];
     };
 };
 
-const collections:{[key:string]:Collection} = {};
+const collection_names = Object.keys(DBCollection);
 
-for (const x of Object.keys(DBCollection)) {
-    collections[x.toString()] = new Collection({
-        api_key: process.env.DB_KEY!,
-        api_url: process.env.DB_URL!,
-        data_source: process.env.DB_SOURCE!,
-        database: process.env.DB_NAME!,
-        /* @ts-ignore */
-        collection: DBCollection[x],
-    });
-}
+const collections = Object.fromEntries(collection_names.map(x => {
+    DBCollection
+    type X = DBCollection[x];
+    return [x,
+        new Collection<CollectionType<X>>({
+            api_key: process.env.DB_KEY!,
+            api_url: process.env.DB_URL!,
+            data_source: process.env.DB_SOURCE!,
+            database: process.env.DB_NAME!,
+            /* @ts-ignore */
+            collection: DBCollection[x],
+        })
+    ]
+}));
 
+const user = await collections.users.findOne({ username: "test" });
+l
 export default collections;

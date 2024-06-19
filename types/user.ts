@@ -1,7 +1,7 @@
-//Types: User
+//Types: 
 
 //ENUMS
-export enum UserThemeSetting {
+export enum ThemeSetting {
     light = 'light',
     dark = 'dark',
     sync = 'sync',
@@ -9,11 +9,11 @@ export enum UserThemeSetting {
     classic = 'classic',
     high_contrast = 'high_contrast'
 }
-export enum UserControlsSetting {
+export enum ControlsSetting {
     buttons = 'buttons',
     commands = 'commands'
 }
-export enum UserNotificationType {
+export enum NotificationType {
     account_update = 'account_update',
     account_update_profile = 'account_update_profile',
     account_login = 'account_login',
@@ -38,7 +38,7 @@ export enum UserNotificationType {
     blockly_update = 'blockly_update',
     blockly_newsletter = 'blockly_newsletter'
 }
-export enum UserSessionActivityType {
+export enum SessionActivityType {
     created = "created",
     revoked = "revoked",
     expired = "expired",
@@ -105,7 +105,7 @@ export enum UserSessionActivityType {
     update_backup_codes = "update_backup_codes",
     delete_backup_codes = "delete_backup_codes",
 }
-export enum UserBadge {
+export enum Badge {
     bug_hunter = "bug_hunter",
     supporter_0 = "supporter_tier_0",
     supporter_1 = "supporter_tier_1",
@@ -114,7 +114,7 @@ export enum UserBadge {
     supporter_4 = "supporter_tier_4",
     supporter_5 = "supporter_tier_5",
 }
-export enum UserAchievement {
+export enum Achievement {
     join_the_community = "join_the_community",
     forums = "forums",
     help = "help",
@@ -129,22 +129,22 @@ export enum UserAchievement {
 
 
 //SUBTYPES
-export type UserBackupCode = {
+export type BackupCode = {
     code: string;
     used: boolean;
 }
 
-export type UserEmailVerification = {
+export type EmailVerification = {
     address?: string;
     token: string;
     code: string;
 }
-export type UserPhoneVerification = {
+export type PhoneVerification = {
     phone?: string;
     code: string;
 }
 
-export type UserSessionLocation = {
+export type SessionLocation = {
     city: string;
     region: string;
     region_code: string;
@@ -155,27 +155,27 @@ export type UserSessionLocation = {
     latitude: number;
     longitude: number;
 }
-export type UserSessionDevice = {
+export type SessionDevice = {
     ip: string;
     os: string;
     browser: string;
     device: string;
 }
-export type UserSessionActivityChange = {
+export type SessionActivityChange = {
     key: string;
     old?: string;
     new?: string;
 }
-export type UserSessionActivity = {
+export type SessionActivity = {
     id: string;
-    type: UserSessionActivityType;
+    type: SessionActivityType;
     changes: [];
     details: {
         [key: string]: any;
     };
     date: number;
 }
-export type UserSession = {
+export type Session = {
     id: string;
     token: string;
     created_at: number;
@@ -184,13 +184,13 @@ export type UserSession = {
     //If the user has verified MFA yet
     authorized: boolean;
     active: boolean;
-    device: UserSessionDevice;
-    location: UserSessionLocation;
+    device: SessionDevice;
+    location: SessionLocation;
     name: string;
-    activity: UserSessionActivity[];
+    activity: SessionActivity[];
 }
 
-export type UserBan = {
+export type Ban = {
     banned: boolean;
     duration?: number;
     end_date?: number;
@@ -199,7 +199,7 @@ export type UserBan = {
     has_appealed?: boolean;
     appeal_denied?: boolean;
 }
-export type UserWarning = {
+export type Warning = {
     id: string;
     created_at: number;
     created_by: string;
@@ -207,18 +207,18 @@ export type UserWarning = {
     reason: string;
 }
 
-export type UserNotificationSetting = {
+export type NotificationSetting = {
     email: boolean;
     in_app: boolean;
 }
-export type UserNotificationSettings = {
-    [key in UserNotificationType]: boolean;
+export type NotificationSettings = {
+    [key in NotificationType]: boolean;
 }
-export type UserEmailUnsubscribeToken = {
-    type: UserNotificationType;
+export type EmailUnsubscribeToken = {
+    type: NotificationType;
     token: string;
 }
-export type UserNotification = {
+export type Notification = {
     id: string;
     created_at: number;
     read: boolean;
@@ -231,7 +231,7 @@ export type UserNotification = {
     url?: string;
 }
 
-export type UserBadgeDisplay = {
+export type BadgeDisplay = {
     owner: boolean;
     staff: boolean;
     partner: boolean;
@@ -241,7 +241,7 @@ export type UserBadgeDisplay = {
     tester: boolean;
 }
 
-export type UserAnimationSetting = {
+export type AnimationSetting = {
     avatars: boolean;
     popups: boolean;
     loaders: boolean;
@@ -250,30 +250,32 @@ export type UserAnimationSetting = {
 }
 
 
+
+
 export type User = {
     created_at: number;
     username: string;
 
     email?: string;
     email_verified: boolean;
-    email_verification?: UserEmailVerification;
-    email_unsubscribe_tokens?: UserEmailUnsubscribeToken[];
+    email_verification?: EmailVerification;
+    email_unsubscribe_tokens?: EmailUnsubscribeToken[];
 
     phone?: string;
     phone_verified?: boolean;
-    phone_verification?: UserPhoneVerification;
+    phone_verification?: PhoneVerification;
 
-    sessions: UserSession[];
+    sessions: Session[];
     password?: string;
     password_reset_token?: string;
     mfa_app_enabled?: boolean;
     mfa_app_secret_key?: string;
     mfa_sms_enabled?: boolean;
     mfa_sms_code?: string;
-    mfa_backup_codes?: UserBackupCode[];
+    mfa_backup_codes?: BackupCode[];
 
-    ban?: UserBan;
-    warnings: UserWarning[];
+    ban?: Ban;
+    warnings: Warning[];
 
     disable_account_action_id?: string;
     delete_account_action_id?: string;
@@ -287,7 +289,7 @@ export type User = {
     has_applied_for_educator?: boolean;
     has_applied_for_tester?: boolean;
 
-    notifications: UserNotification[];
+    notifications: Notification[];
     pinned_projects?: string[];
     
     staff_portal_user_search_history?: string[];
@@ -333,7 +335,7 @@ export type User = {
     isDisabledByStaff: boolean;
     isDeletedByStaff: boolean;
 
-    displayed_badges?: UserBadgeDisplay;
+    displayed_badges?: BadgeDisplay;
 
     //PROFILE STUFF
     badges: string[];
@@ -356,15 +358,15 @@ export type User = {
     blocked_can_see_public_projects?: boolean;
     blocked_can_see_profile?: boolean;
     //APPERANCE STUFF
-    website_theme: UserThemeSetting;
+    website_theme: ThemeSetting;
     accent_theme?: number;
-    lab_theme: UserThemeSetting;
-    lab_controls: UserControlsSetting;
+    lab_theme: ThemeSetting;
+    lab_controls: ControlsSetting;
     high_contrast?: boolean;
     text_scale?: number;
-    animations?: UserAnimationSetting;
+    animations?: AnimationSetting;
     language?: string;
 
     //NOTIFICATIONS
-    notification_settings?: UserNotificationSettings;
+    notification_settings?: NotificationSettings;
 }
