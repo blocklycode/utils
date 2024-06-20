@@ -1,0 +1,229 @@
+---
+
+export interface Props {}
+const { } = Astro.props;
+
+---
+
+
+<footer>
+    <div class="section">
+        <div class="brand">
+            <img src="https://assets.blocklycode.org/favicon.png" alt="" />
+            <p>Blockly Code</span>
+        </div>
+        <div class="social">
+            <ul role="list" aria-label="Social Links">
+                <li><a href="https://social.blocklycode.org/discord" aria-label="Discord server"><i class="bx bxl-discord-alt" aria-hidden="true"></i></a></li>
+                <li><a href="https://twiter.com/@Blockly_Code" aria-label="Twitter"><i class="bx bxl-twitter" aria-hidden="true"></i></a></li>
+                <li><a href="https://youtube.com/@Blockly_Code" aria-label="Youtube"><i class="bx bxl-youtube" aria-hidden="true"></i></a></li>
+                <li><a href="https://twitch.tv/blocklycode" aria-label="Twitch"><i class="bx bxl-twitch" aria-hidden="true"></i></a></li>
+                <li><a href="mailto:contact@blocklycode.org" aria-label="Email"><i class="bx bx-envelope" aria-hidden="true"></i></a></li>
+            </ul>
+        </div>
+        <div class="version">
+            <p>You are using Blockly 4.0 <span class="alpha">Alpha</span></p>
+            <a href="https://www.blocklycode.org/updates#4-0-0">Changelog</a>
+        </div>
+    </div>
+    <div class="section">
+        <nav class="nav" aria-label="Footer">
+            <ul role="list">
+                <li><a href="https://www.blocklycode.org/">Home</a></li>
+                <li><a href="https://www.blocklycode.org/projects">My Projects</a></li>
+                <li><a href="https://www.blocklycode.org/applications">Applications</a></li>
+                <li><a href="https://support.blocklycode.org/knowledge">Documentation</a></li>
+                <li><a href="https://status.blocklycode.org">System Status</a></li>
+                <li><a href="https://feedback.blocklycode.org/">Feedback</a></li>
+                <li><a href="https://feedback.blocklycode.org/bugs/new">Bug Report</a></li>
+                <li><a href="https://legal.blocklycode.org/terms">Terms of Service</a></li>
+                <li><a href="https://legal.blocklycode.org/acceptable">Acceptable Use Policy</a></li>
+                <li><a href="https://legal.blocklycode.org/privacy">Privacy Policy</a></li>
+                <li><a href="https://legal.blocklycode.org/cookie">Cookie Policy</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="section">
+        <p class="copyright">&copy; Copyright Blockly Code 2021 - {new Date().getFullYear()}. All rights reserved</p>
+    </div>
+</footer>
+
+<style>
+    footer {
+        background: var(--bc-clr-bg-footer);
+        padding: 3rem;
+        margin-top: auto;
+        display: grid;
+        grid-template-columns: 30rem 1fr 25rem;
+    }
+    .section {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+    .brand img {
+        height: 5rem;
+    }
+    .brand p {
+        background: linear-gradient(45deg, var(--bc-clr-primary-400), var(--bc-clr-primary-400), #fff, var(--bc-clr-secondary-400), var(--bc-clr-secondary-400));
+        background-clip: text;
+        -webkit-background-clip: text;
+        font-size: var(--bc-fs-900);
+        color: transparent;
+    }
+
+    .social ul {
+        margin: 0;
+        display: flex;
+        gap: 1rem;
+        list-style: none;
+    }
+    .social a {
+        font-size: var(--bc-fs-500);
+        color: var(--bc-clr-primary-400);
+    }
+    .social a:hover {
+        color: var(--bc-clr-primary-600);
+    }
+
+    .version {
+        margin-top: auto;
+    }
+    .version p {
+        color: var(--bc-clr-text-600);
+    }
+    .version a {
+        font-size: var(--bc-fs-200);
+        font-weight: 200;
+        color: var(--bc-clr-text-100);
+    }
+    .version a:hover {
+        color: var(--bc-clr-primary-400);
+    }
+
+    .version :is(.beta, .alpha) {
+        background: rgba(var(--_rgb), .1);
+        border: .1rem solid rgb(var(--_rgb));
+        border-radius: 100vmax;
+        margin: auto .5rem;
+        padding: .3rem .5rem;
+        display: inline-block;
+        line-height: 1;
+        /* font-weight: 800; */
+        font-size: var(--bc-fs-300);
+        color: rgb(var(--_rgb));
+    }
+
+    .version .beta {
+        --_rgb: 88, 101, 242;
+    }
+
+    .version .alpha {
+        --_rgb: 249, 151, 26;
+    }
+
+    .nav ul {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 1rem;
+        max-height: 20rem;
+        list-style: none;
+    }
+    .nav li {
+        line-height: 1;
+    }
+    .nav a {
+        line-height: 1;
+        font-size: var(--bc-fs-300);
+        font-weight: 100;
+        color: var(--bc-clr-text-100);
+    }
+    .nav a:hover {
+        color: var(--bc-clr-primary-400);
+    }
+    .nav a:is(.betaFeature, .alphaFeature)::after {
+        margin-inline: auto 0;
+        padding: .3rem .5rem;
+        line-height: .8;
+    }
+
+    .copyright {
+        margin: auto 0 0 auto;
+        text-align: end;
+        font-size: var(--bc-fs-300);
+        color: var(--bc-clr-text-600);
+    }
+
+    @media (min-width: 750px) {
+        .social {
+            margin-left: 7rem;
+        }
+    }
+
+    @media (max-width: 1000px) {
+        footer {
+            grid-template-columns: 30rem 1fr 25rem;
+        }
+    }
+    @media (max-width: 800px) {
+        .section:last-child {
+            padding-top: 1rem;
+            grid-column: span 2;
+        }
+    }
+    @media (max-width: 800px) and (min-width: 600px) {
+        footer {
+            grid-template-columns: 1fr 1fr;
+        }
+        .copyright {
+            margin-inline: auto;
+            text-align: center;
+        }
+    }
+    @media (max-width: 600px) {
+        .brand img {
+            display: none;
+        }
+    }
+    @media (max-width: 600px) and (min-width: 450px) {
+        footer {
+            grid-template-columns: 1fr 15rem;
+        }
+        .nav ul {
+            max-height: fit-content;
+            text-align: right;
+        }
+    }
+    @media (max-width: 450px) {
+        footer {
+            display: block;
+        }
+        .section:first-child {
+            border-bottom: 1px solid var(--bc-clr-text-800);
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+        }
+        .section:last-child {
+            border-top: 1px solid var(--bc-clr-text-800);
+            margin-top: 1rem;
+            padding-top: 1rem;
+        }
+        .brand, .social, .version {
+            margin-inline: auto;
+            text-align: center;
+        }
+        .nav ul {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            max-height: fit-content; 
+            text-align: center;
+        }
+    }
+</style>

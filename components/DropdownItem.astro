@@ -1,0 +1,93 @@
+---
+
+type DropdownItem = {
+    label: string;
+    icon?: string;
+    style?: "danger" | "normal";
+    dataAttributes?: {
+        [key: string]: string;
+    };
+}
+
+type DropdownLink = DropdownItem & {
+    type: "link";
+    href: string;
+    external?: boolean;
+}
+
+type DropdownButton = DropdownItem & {
+    type: "button";
+    id?: string;
+    action: string;
+}
+
+type DropdownHeading = DropdownItem & {
+    type: "heading";
+}
+
+export type Props = DropdownLink | DropdownButton | DropdownHeading;
+
+const { type, label, icon, style = "normal", dataAttributes = {} } = Astro.props as Props;
+
+---
+
+{
+    type === "heading" ? <h6 {...dataAttributes}>
+        {icon ? <i class={"bx " + icon} aria-hidden="true"></i> : ""}
+        <span>{label}</span>
+    </h6> :
+    type === "link" ? <a href={Astro.props.href} target={Astro.props.external ? "_blank" : undefined} {...dataAttributes} data-dropdown-item={style}>
+        {icon ? <i class={"bx " + icon} aria-hidden="true"></i> : ""}
+        <span>{label}</span>
+        {Astro.props.external && <i class="bx bx-link-external | push-right" aria-label="External link"></i>}
+    </a> :
+    type === "button" ? <button id={Astro.props.id} data-dropdown-action={Astro.props.action} {...dataAttributes} data-dropdown-item={style}>
+        {icon ? <i class={"bx " + icon} aria-hidden="true"></i> : ""}
+        <span>{label}</span>
+    </button> :
+    ""
+}
+
+
+<style>
+    h6, :global(.dropdown-heading) {
+        padding-inline: .5rem;
+        margin-block: .2rem;
+        display: block;
+        white-space: nowrap;
+        text-transform: uppercase;
+        font-size: var(--bc-fs-300);
+        font-weight: 700;
+        font-family: var(--bc-ff-heading);
+        color: var(--bc-clr-text-600);
+    }
+    a, button, :global(.dropdown-item) {
+        background: transparent;
+        border: none;
+        border-radius: .5rem;
+        margin: 0;
+        padding: .5rem;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        width: 100%;
+        white-space: nowrap;
+        text-align: left;
+        font-size: var(--bc-fs-300);
+        font-family: var(--bc-ff-body);
+        font-weight: 300;
+        color: var(--bc-clr-text-400);
+        transition: .3s;
+        cursor: pointer;
+    }
+    :is(a, button):is(:hover, :focus-visible),
+    :global(.dropdown-item:is(:hover, :focus-visible)) {
+        background: var(--bc-clr-bg-hover);
+        text-decoration: none;
+        color: var(--bc-clr-text-100);
+    }
+    :is(a, button)[data-dropdown-item="danger"],
+    :global(.dropdown-item[data-dropdown-item="danger"]) {
+        color: var(--bc-clr-danger-400);
+    }
+</style>

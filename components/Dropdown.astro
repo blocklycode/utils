@@ -1,0 +1,91 @@
+---
+
+export type Props = {
+	id: string;
+    label: string;
+	label_type: "text" | "image" | "icon";
+    label_class?: string;
+    arrow?: boolean;
+}
+
+const { id, label, label_type, label_class, arrow = true } = Astro.props as Props;
+
+---
+
+<div class="dropdown" id={id + "Dropdown"} aria-expanded="false">
+	<button class={(label_class ? (label_class + " | ") : "") + "nostyles"} id={id + "Dropdown_Button"} data-dropdown-button={id} aria-label={label_type === "text" ? undefined : label}>
+        {
+            label_type == "icon" ? <i class={"bx " + label}></i> :
+            label_type == "image" ? <img src={label} alt=""/> :
+            label_type == "text" ? <span>{label}</span>  :
+        ""}
+        {arrow && label_type !== "icon" ? <i class="bx bx-caret-down"></i> : ""}
+	</button>
+	<div class="menu" id={id + "Dropdown_Menu"}>
+		<slot/>
+	</div>
+</div>
+
+<script is:inline>
+	function loadDropdowns() {
+		for (let x of document.querySelectorAll(".dropdown")) {
+            if (x.dataset.dropdownLoaded == "true") continue;
+            const button = x.querySelector("[data-dropdown-button]");
+            button.addEventListener("click", () => {
+                x.setAttribute("aria-expanded", x.getAttribute("aria-expanded") == "false");
+            });
+            x.dataset.dropdownLoaded = "true";
+        };
+	};
+</script>
+<script>
+	document.addEventListener("click", e => {
+        const target = e.target as HTMLElement;
+        const dropdown = target.closest(".dropdown") as HTMLDivElement;
+        for (let x of document.querySelectorAll(".dropdown[aria-expanded='true']") as NodeListOf<HTMLDivElement>) {
+            if (dropdown && dropdown.id != x.id) {
+                x.setAttribute("aria-expanded", "false");
+            };
+        };
+	});
+    /* @ts-ignore */
+	try {loadDropdowns();} catch(e) {};
+</script>
+<style>
+	.dropdown {
+        position: relative;
+    }
+    .dropdown i.bx-chevron-down {
+        transition: .3s;
+    }
+    .dropdown[aria-expanded="true"] i.bx-chevron-down {
+        rotate: 180deg;
+    }
+    .menu {
+        background: var(--bc-clr-bg-drop);
+        border-radius: 1rem;
+        box-shadow: 0 .8rem 1.6rem 0 rgba(0,0,0,0.2);
+        margin: 0;
+        padding: 1rem;
+        position: absolute;
+        right: 0;
+        min-width: 16rem;
+        z-index: 6;
+        transition: .5s;
+        opacity: 0;
+        pointer-events: none;
+        transform: skewX(3deg) translate(10px, 30px);
+    }
+    .menu :global(hr) {
+        background: var(--bc-clr-hr-drop);
+        border: none;
+        border-radius: .2rem;
+        margin-block: .4rem;
+        height: .1rem;
+    }
+    .dropdown[aria-expanded="true"] .menu {
+        opacity: 1;
+        transform: none;
+        pointer-events: all;
+    }
+</style>

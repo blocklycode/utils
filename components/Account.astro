@@ -1,0 +1,39 @@
+---
+
+// Import the global types
+import type * as types from "../types";
+
+import Dropdown from "./Dropdown.astro";
+
+//define the props it takes
+export interface Props {
+    user?: types.user.User;
+}
+
+const { user } = Astro.props;
+
+---
+
+<div>
+    {user ? <div class="flex v-center">
+        <Dropdown id="navNotifications" label_type="icon" label="bx-bell">
+            <p>This isn't done yet</p>
+        </Dropdown>
+        <Dropdown id="navUser" label_type="image" label={user.avatar}>
+            <a class="item" href="https://www.blocklycode.org/projects">Projects</a>
+            <a class="item" href={"https://www.blocklycode.org/u/" + user.username}>Profile</a>
+            <a class="item" href="https://www.blocklycode.org/account/settings">Account</a>
+            {user.isStaff || user.isMod || user.isSupport ? 
+                <a class="item" href="https://console.blocklycode.org">Admin Console</a>
+                <hr />
+            : ""}
+            <hr />
+            <a class="item" href="https://support.blocklycode.org/">Support</a>
+            <button class="item" data-logout-button>Logout</button>
+        </Dropdown>
+    </div> : <a href="/login" class="btn clr-primary">Login</a>}
+</div>
+
+<style>
+    
+</style>
