@@ -67,45 +67,45 @@ enum DBCollection {
 }
 
 type CollectionType<T> =
-    T extends DBCollection.announcements ? types.announcement.Announcement :
-    T extends DBCollection.appeals ? types.appeal.Appeal :
-    T extends DBCollection.applications ? types.application.Application :
+    T extends DBCollection.announcements ? types.announcements.Announcement :
+    T extends DBCollection.appeals ? types.appeals.Appeal :
+    T extends DBCollection.applications ? types.applications.Application :
     T extends DBCollection.audit_log ? types.audit_log.Action :
-    T extends DBCollection.blocklets ? types.blocklet.Blocklet :
-    T extends DBCollection.bug_reports ? types.bug_report.Report :
+    T extends DBCollection.blocklets ? types.blocklets.Blocklet :
+    T extends DBCollection.bug_reports ? types.bug_reports.Report :
     T extends DBCollection.documentation ? types.documentation.Page :
-    T extends DBCollection.experiments ? types.experiment.Experiment :
+    T extends DBCollection.experiments ? types.experiments.Experiment :
     T extends DBCollection.feedback ? types.feedback.Post :
-    T extends DBCollection.lessons ? types.lesson.Lesson :
-    T extends DBCollection.positions ? types.position.Position :
-    T extends DBCollection.projects ? types.project.Project :
+    T extends DBCollection.lessons ? types.lessons.Lesson :
+    T extends DBCollection.positions ? types.positions.Position :
+    T extends DBCollection.projects ? types.projects.Project :
     T extends DBCollection.support_articles ? types.support.Article :
     T extends DBCollection.support_posts ? types.support.Post :
     T extends DBCollection.support_tickets ? types.support.Ticket :
-    T extends DBCollection.teams ? types.team.Team :
-    T extends DBCollection.templates ? types.template.Template :
-    T extends DBCollection.users ? types.user.User :
+    T extends DBCollection.teams ? types.teams.Team :
+    T extends DBCollection.templates ? types.templates.Template :
+    T extends DBCollection.users ? types.users.User :
     never;
 
 type CollectionType2 = {
-    announcements: types.announcement.Announcement;
-    appeals: types.appeal.Appeal;
-    applications: types.application.Application;
+    announcements: types.announcements.Announcement;
+    appeals: types.appeals.Appeal;
+    applications: types.applications.Application;
     audit_log: types.audit_log.Action;
-    blocklets: types.blocklet.Blocklet;
-    bug_reports: types.bug_report.Report;
+    blocklets: types.blocklets.Blocklet;
+    bug_reports: types.bug_reports.Report;
     documentation: types.documentation.Page;
-    experiments: types.experiment.Experiment;
+    experiments: types.experiments.Experiment;
     feedback: types.feedback.Post;
-    lessons: types.lesson.Lesson;
-    positions: types.position.Position;
-    projects: types.project.Project;
+    lessons: types.lessons.Lesson;
+    positions: types.positions.Position;
+    projects: types.projects.Project;
     support_articles: types.support.Article;
     support_posts: types.support.Post;
     support_tickets: types.support.Ticket;
-    teams: types.team.Team;
-    templates: types.template.Template;
-    users: types.user.User;
+    teams: types.teams.Team;
+    templates: types.templates.Template;
+    users: types.users.User;
 }
 
 export type CollectionOptions = {
@@ -294,7 +294,6 @@ class Collection<DocType> {
 const collection_names = Object.keys(DBCollection);
 
 const collections = Object.fromEntries(collection_names.map(x => {
-    DBCollection
     type X = DBCollection[x];
     return [x,
         new Collection<CollectionType<X>>({
@@ -308,6 +307,4 @@ const collections = Object.fromEntries(collection_names.map(x => {
     ]
 }));
 
-const user = await collections.users.findOne({ username: "test" });
-l
 export default collections;

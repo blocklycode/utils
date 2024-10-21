@@ -1,19 +1,24 @@
-import * as announcement from "./announcement";
-import * as appeal from "./appeal";
-import * as application from "./application";
+import * as announcements from "./announcement";
+import * as appeals from "./appeal";
+import * as applications from "./application";
 import * as audit_log from "./audit_log";
-import * as blocklet from "./blocklet";
-import * as bug_report from "./bug_report";
-import * as comment from "./comment";
+import * as blocklets from "./blocklet";
+import * as bug_reports from "./bug_report";
+import * as comments from "./comment";
 import * as documentation from "./documentation";
-import * as experiment from "./experiment";
+import * as experiments from "./experiment";
 import * as feedback from "./feedback";
-import * as lesson from "./lesson";
-import * as position from "./position";
-import * as project from "./project";
+import * as lessons from "./lesson";
+import * as positions from "./position";
+import * as projects from "./project";
 import * as support from "./support";
-import * as team from "./team";
-import * as template from "./template";
-import * as user from "./user";
+import * as teams from "./team";
+import * as templates from "./template";
+import * as users from "./user";
 
-export { announcement, appeal, application, audit_log, blocklet, bug_report, comment, documentation, experiment, feedback, lesson, position, project, support, team, template, user };
+import * as API from "./api";
+
+export {
+    announcements, appeals, applications, audit_log, blocklets, bug_reports, comments, documentation, experiments, feedback, lessons, positions, projects, support, teams, templates, users,
+    API
+};

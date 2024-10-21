@@ -29,11 +29,38 @@ import { db } from 'blocklycode';
 import { User } from "blocklycode/components";
 ```
 
+## `types`
+
+Defines (nearly) all of the types used with TypeScript throughtout Blockly Code.
+
+```ts
+
+import { types } from "blocklycode";
+
+import { user} from "blocklycode/types";
+
+const user:types.user.User = {
+    username: "blocklycode",
+    email: "example@blocklycode.org",
+    password: "password",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+};
+
+```
+
+##
+
+
 ## `db`
 
 Can be used to interact with the database.
 
-```js
+# USE IT IN SEVER SIDE CODE ONLY
+
+(i.e. only when surrounded by `---`, NOT when contained in a `<script>`)
+
+```ts
 import { db } from 'blocklycode';
 //or
 import { users } from "blocklycode/db";
