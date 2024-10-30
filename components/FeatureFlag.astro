@@ -1,0 +1,32 @@
+---
+
+import type * as types from "../types";
+import db from "../db";
+import { murmurhash } from "../hash";
+
+export interface Props {
+    flag: string;
+    user?: types.users.User;
+}
+
+const { user } = Astro.props as Props;
+
+function inPercentage(flag_id:string, user_id:string, percentage:number):boolean {
+    return murmurhash(`${flag_id}-${user_id}`) / 4294967295 < percentage;
+}
+
+const flag = await db.feature_flags.findOne({id: Astro.props.flag});
+
+const has_access = flag &&
+    (typeof flag.availability === "boolean" && flag.availability === true) ||
+    (flag.availability instanceof Array && flag.availability.some(x => {
+        if (!user) return false;
+        if (x.percentage && !inPercentage(flag.id, user.username, x.percentage)) return false;
+        //this probably works
+        /* @ts-ignore */
+        if (x.fields) return Object.keys(x.fields).every(y => user[y] == x.fields![y] || (x.fields![y] instanceof Array && user[y].some(z => x.fields![y].includes(z))));
+    }))
+
+---
+
+{has_access ? <slot /> : ""}

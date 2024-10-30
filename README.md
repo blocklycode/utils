@@ -119,6 +119,7 @@ const options = [
 
 **Components**
 
+- `FeatureFlag` (used to check if a user has access to a feature flag)
 - `User`
 - `Dropdown`
 - `Modal`
