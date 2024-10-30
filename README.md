@@ -49,10 +49,8 @@ const user:types.user.User = {
 
 ```
 
-##
 
-
-## `db`
+## `DB`
 
 Can be used to interact with the database.
 
@@ -61,22 +59,22 @@ Can be used to interact with the database.
 (i.e. only when surrounded by `---`, NOT when contained in a `<script>`)
 
 ```ts
-import { db } from 'blocklycode';
+import { DB } from 'blocklycode';
 //or
 import { users } from "blocklycode/db";
 
-const user = await db.users.findOne({ email: "example@blocklycode.org" });
+const user = await DB.users.findOne({ email: "example@blocklycode.org" });
 
 console.log(user);
 
 //It isn't the same as mongoose though, e.g.
-const new_user = await db.users.createOne({ email: "example@blocklycode.org" });
+const new_user = await DB.users.createOne({ email: "example@blocklycode.org" });
 
 console.log(new_user);//"6193504e1be4ab27791c8133"
 
 ```
 
-`db.[collection].[operation]`
+`DB.[collection].[operation]`
 
 **Operations**
 
