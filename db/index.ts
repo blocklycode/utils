@@ -291,20 +291,22 @@ class Collection<DocType> {
     };
 };
 
-const collection_names = Object.keys(DBCollection);
+const collection_names = Object.keys(DBCollection) as (keyof typeof DBCollection)[];
 
-const collections = Object.fromEntries(collection_names.map(x => {
-    type X = DBCollection[x];
-    return [x,
-        new Collection<CollectionType<X>>({
+const collections = Object.fromEntries(
+    collection_names.map((name) => [
+        name,
+        /* @ts-ignore */
+        new Collection<CollectionType<typeof DBCollection[name]>>({
             api_key: process.env.DB_KEY!,
             api_url: process.env.DB_URL!,
             data_source: process.env.DB_SOURCE!,
             database: process.env.DB_NAME!,
-            /* @ts-ignore */
-            collection: DBCollection[x],
-        })
-    ]
-}));
+            collection: DBCollection[name],
+        }),
+    ])
+) as {
+    [K in keyof typeof DBCollection]: Collection<CollectionType<(typeof DBCollection)[K]>>
+};
 
 export default collections;
