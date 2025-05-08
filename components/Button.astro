@@ -1,0 +1,145 @@
+---
+
+type Modifiers = "wrap-text" | "no-mg" | "no-mgb" | "no-mgi" | "w-100";
+
+export type Props = {
+    text?: string;
+    loader?: boolean;
+    theme: "primary" | "secondary" | "danger" | "success" | "cta" | "outline";
+    type?: "submit" | "button";
+    disabled?: boolean;
+    href?: string;
+    target?: "_blank";
+    modifiers?: Modifiers[];
+    id?: string;
+
+    className?: string;
+}
+
+const { text, loader = false, theme, type = "button", disabled = false, href, target = "", modifiers = [], id, className } = Astro.props as Props;
+
+---
+
+{href ? 
+<a href={href} target={target} data-theme={theme} aria-disabled={disabled} class={className + " block-link"} data-modifiers={modifiers.join(" ")} id={id}>
+    {loader ? <div class="loader" aria-hidden="true"></div> : ""}
+    {text ? <span>{text}</span> : <slot />}
+</a>
+: 
+<button type={type} data-theme={theme} disabled={disabled} aria-disabled={disabled} class={className} data-modifiers={modifiers.join(" ")} id={id}>
+    {loader ? <div class="loader" aria-hidden="true"></div> : ""}
+    {text ? <span>{text}</span> : <slot />}
+</button>
+}
+
+<style>
+    :is(button, a) {
+        background: inherit;
+        border: none;
+        border-radius: .5rem;
+        box-shadow: 0.3rem 0.3rem 0.6rem var(--bc-clr-dark-800), -0.2rem -0.2rem 0.5rem var(--bc-clr-dark-600);
+        padding: 1rem 3rem;
+        margin: .5rem;
+        position: relative;
+        display: inline-flex;
+        gap: .5rem;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        line-height: 1;
+        font-family: var(--bc-ff-body);
+        font-size: var(--bc-fs-400);
+        font-weight: 500;
+        color: var(--bc-clr-text-100);
+        cursor: pointer;
+        transition: translate .3s ease;
+    }
+
+    :is(button, a):is(:focus, :focus-visible, :focus-within) {
+        outline: 3px solid transparent;
+    }
+
+    :is(button, a):is(:hover, :focus-visible) {
+        translate: 0 -.3rem;
+    }
+
+    [data-theme] {
+        background: var(--bc-clr-button-400);
+    }
+    [data-theme="primary"] {
+        --bc-clr-button-400: var(--bc-clr-primary-400);
+    }
+
+    [data-theme="secondary"] {
+        --bc-clr-button-400: var(--bc-clr-secondary-400);
+    }
+
+    [data-theme="danger"] {
+        --bc-clr-button-400: var(--bc-clr-danger-400);
+    }
+
+    [data-theme="success"] {
+        --bc-clr-button-400: var(--bc-clr-success-400);
+    }
+
+    [data-theme="cta"] {
+        --bc-clr-button-400: linear-gradient(135deg, var(--bc-clr-primary-400), var(--bc-clr-secondary-400));
+    }
+    [data-theme="outline"] {
+        border: .1rem solid var(--bc-clr-primary-400);
+        color: var(--bc-clr-primary-400);
+
+        --bc-clr-button-400: transparent;
+    }
+
+    :not([data-modifiers~="wrap-text"]) {white-space: nowrap}
+    [data-modifiers~="wrap-text"] {flex-wrap: wrap}
+    [data-modifiers~="no-mg"] {margin: 0}
+    [data-modifiers~="no-mgb"] {margin-block: 0}
+    [data-modifiers~="no-mgi"] {margin-inline: 0}
+    [data-modifiers~="w-100"] {width: 100%}
+
+    .loader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        translate: -50% -50%;
+        width: 24px;
+        height: 24px;
+        animation: s__loader_rotate 1s linear infinite;
+        transition: .3s;
+        opacity: 0
+    }
+    .loader::before, .loader::after {
+        content: "";
+        background-color: var(--bc-clr-primary-400);
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        width: 12px;
+        aspect-ratio: 1;
+        animation: buttons__loader_scale 1s infinite ease-in-out
+    }
+    .loader::before {
+        top: auto;
+        bottom: 0;
+        animation-delay: .5s
+    }
+    span {
+        font-size: inherit;
+        color: inherit;
+        transition: .3s
+    }
+
+    .loading .loader {opacity: 1}
+    .loading span {opacity: 0}
+
+    @keyframes buttons__loader_rotate {
+        from {rotate: 0}
+        to {rotate: 360deg}
+    }
+    @keyframes buttons__loader_scale {
+        0%, 100% {transform: scale(0)}
+        50% {transform: scale(1)}
+    }
+</style>

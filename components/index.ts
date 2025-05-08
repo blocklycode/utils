@@ -1,4 +1,5 @@
 import Account from './Account.astro';
+import Button from './Button.astro';
 import CommentSection from './CommentSection.astro';
 import Confirm from './Confirm.astro';
 import Dropdown from './Dropdown.astro';
@@ -13,4 +14,4 @@ import Modal from './Modal.astro';
 import PageError from './PageError.astro';
 import User from './User.astro';
 
-export { Account, CommentSection, Confirm, Dropdown, DropdownItem, ExternalLink, Filters, Footer, Head, Header, Input, Modal, PageError, User };
+export { Account, Button, CommentSection, Confirm, Dropdown, DropdownItem, ExternalLink, Filters, Footer, Head, Header, Input, Modal, PageError, User };
