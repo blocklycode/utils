@@ -3,6 +3,7 @@
 import Account from "./Account.astro";
 import Dropdown, { type Props as DropdownProps } from "./Dropdown.astro";
 import DropdownItem, { type Props as DropdownItemProps } from "./DropdownItem.astro";
+import Button from "./Button.astro";
 
 type HeaderLink = {
     type: "link";
@@ -56,7 +57,7 @@ const { title, items } = Astro.props as Props;
         </div>
     </nav>
     <div>
-        <button class="cta-button">Get Started</button>
+		<Button theme="cta" href="https://app.infinlabs.org" text="Get Started" />
         <!-- <Account -->
     </div>
 </header>
@@ -132,23 +133,6 @@ const { title, items } = Astro.props as Props;
 	nav a:is(:hover, :focus-visible)::after {
 		width: 100%;
 	}
-
-    .cta-button {
-        background: var(--gradient-primary);
-        color: white;
-        padding: 0.8rem 1.5rem;
-        border-radius: 100vmax;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        border: none;
-        cursor: pointer;
-        box-shadow: 0 4px 15px hsla(var(--bc-clr-primary-400-hsl), 0.3);
-    }
-
-    .cta-button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 7px 20px hsla(var(--bc-clr-primary-400-hsl), 0.5);
-    }
 
     .mobile-menu-toggle {
         display: none;
