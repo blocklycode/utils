@@ -3,13 +3,15 @@
 export interface Props {
     title: string;
     page: string;
-    suffix: string;
+    suffix?: string;
     description?: string;
     icon?: string;
 }
 
-const { title, page, suffix, description = "Learning to code? Well then Blockly Code is just for you! We have a drag and drop system to make coding fun and simple!", icon = "https://assets.blocklycode.org/favicon.png" } = Astro.props;
+const { title, page, suffix, description = "Learning to code? Well then InfinLabs is just for you! We have a drag and drop system to make coding fun and simple!", icon = "https://resources.infinlabs.org/assets/favicon.png" } = Astro.props as Props;
 
+const site_name = suffix ? suffix + " - InfinLabs" : "InfinLabs";
+const page_title = title + " - " + suffix;
 
 ---
 <head>
@@ -17,12 +19,12 @@ const { title, page, suffix, description = "Learning to code? Well then Blockly 
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="title" content={title + " - " + suffix}>
+    <meta name="title" content={page_title}>
     <meta name="description" content={description}>
-    <meta name="keywords" content="Blockly, Code, Discord, Bot, Hosting, Discord Bot, Discord Hosting, Free, Coding, Lab">
+    <meta name="keywords" content="Blockly, Code, Discord, Bot, Hosting, Discord Bot, Discord Hosting, Free, Coding, Lab, InfinLabs, Infin">
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
-    <meta name="author" content={suffix + " - Blockly Code"}>
+    <meta name="author" content={site_name}>
     <meta name="theme-color" content="#458fd9">
     <meta name="generator" content={Astro.generator} />
     
@@ -30,21 +32,20 @@ const { title, page, suffix, description = "Learning to code? Well then Blockly 
     <meta property="og:locale" content="en_US">
     <meta property="og:type" content="website">
     <meta property="og:url" content={Astro.request.url}>
-    <meta property="og:site_name" content={suffix + " - Blockly Code"}>
-    <meta property="og:title" content={title + " - " + suffix}>
+    <meta property="og:site_name" content={site_name}>
+    <meta property="og:title" content={page_title}>
     <meta property="og:description" content={description}>
     <meta property="og:image" content={icon}>
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary">
     <meta property="twitter:url" content={Astro.request.url}>
-    <meta property="twitter:title" content={title + " - " + suffix}>
+    <meta property="twitter:title" content={page_title}>
     <meta property="twitter:description" content={description}>
     <meta property="twitter:image" content={icon}>
     
     <link rel="icon" href={icon}>
     <link rel="stylesheet" href="https://resources.infinlabs.org/styles/global.css">
-    <!-- <script src="https://scripts.blocklycode.org/global.js" crossorigin="anonymous"></script> -->
     <title>{title} {" - "} {suffix}</title>
 
     <slot />

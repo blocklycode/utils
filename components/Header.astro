@@ -25,10 +25,13 @@ const { title, items } = Astro.props as Props;
 
 ---
 
-<header>
-    <h1>{title}</h1>
+<header id="header">
+    <div class="logo">
+        <img src="https://resources.infinlabs.org/assets/banner.png" alt="InfinLabs Logo">
+        <h1>InfinLabs</h1>
+    </div>
     <nav>
-        <ul>
+        <ul class="nav-links">
             {items.map(item => {
                 if (item.type === "link") {
                     return <li class="nav-item">
@@ -48,14 +51,18 @@ const { title, items } = Astro.props as Props;
                 }
             })}
         </ul>
+        <div class="mobile-menu-toggle" id="mobile-menu">
+            <i class='bx bx-menu'></i>
+        </div>
     </nav>
     <div>
-        <Account />
+        <button class="cta-button">Get Started</button>
+        <!-- <Account -->
     </div>
 </header>
 
 <style>
-    header {
+    /* header {
         background: var(--bc-clr-bg-footer);
         padding: 1rem 2rem;
         display: flex;
@@ -156,5 +163,157 @@ const { title, items } = Astro.props as Props;
         h1 {
             display: none;
         }
+    } */
+
+    header {
+		padding: 1.5rem 3rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		position: fixed;
+		width: 100%;
+		z-index: 100;
+		transition: background-color 0.3s ease;
+
+        --gradient-primary: linear-gradient(135deg, var(--bc-clr-primary-400), var(--bc-clr-secondary-400));
+	}
+
+	header.scrolled {
+		background-color: hsla(var(--bc-clr-bg-body-hsl), 0.9);
+		backdrop-filter: blur(10px);
+		box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	}
+
+	.logo {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.logo img {
+		height: 3rem;
+	}
+
+	.logo h1 {
+		font-size: var(--bc-fs-600);
+		background: var(--gradient-primary);
+		background-clip: text;
+		-webkit-background-clip: text;
+		color: transparent;
+		font-weight: 700;
+	}
+
+	nav ul {
+		display: flex;
+		gap: 2rem;
+		list-style: none;
+	}
+
+	nav a {
+		font-size: var(--bc-fs-400);
+		position: relative;
+		transition: color 0.3s ease;
+	}
+
+	nav a:is(:hover, :focus-visible) {
+        text-decoration: none;
+		color: var(--bc-clr-primary-400);
+	}
+
+	nav a::after {
+		content: '';
+		position: absolute;
+		width: 0;
+		height: 2px;
+		bottom: -5px;
+		left: 0;
+		background: var(--gradient-primary);
+		transition: width 0.3s ease;
+	}
+
+	nav a:is(:hover, :focus-visible)::after {
+		width: 100%;
+	}
+
+    .cta-button {
+        background: var(--gradient-primary);
+        color: white;
+        padding: 0.8rem 1.5rem;
+        border-radius: 100vmax;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 15px hsla(var(--bc-clr-primary-400-hsl), 0.3);
     }
+
+    .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 20px hsla(var(--bc-clr-primary-400-hsl), 0.5);
+    }
+
+    .mobile-menu-toggle {
+        display: none;
+        font-size: 2rem;
+        cursor: pointer;
+    }
+
+
+    @media (max-width: 768px) {
+		header {
+			padding: 1rem 2rem;
+		}
+
+		.nav-links {
+			position: fixed;
+			top: 0;
+			right: -100%;
+			width: 70%;
+			height: 100vh;
+			background: var(--bc-clr-dark-800);
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			transition: right 0.3s ease;
+			z-index: 100;
+		}
+
+		.nav-links.active {
+			right: 0;
+		}
+
+		.mobile-menu-toggle {
+			display: block;
+			z-index: 101;
+		}
+
+		.cta-button {
+			width: 100%;
+			max-width: 300px;
+		}
+	}
 </style>
+
+
+<script>
+	const header = document.querySelector("#header") as HTMLElement;
+	window.addEventListener("scroll", () => {
+		if (window.scrollY > 50) {
+			header.classList.add("scrolled");
+		} else {
+			header.classList.remove("scrolled");
+		}
+	});
+
+	const mobileMenu = document.querySelector("#mobile-menu") as HTMLElement;
+	const navLinks = document.querySelector(".nav-links") as HTMLElement;
+	
+	mobileMenu.addEventListener("click", () => {
+		navLinks.classList.toggle("active");
+		if (navLinks.classList.contains("active")) {
+			mobileMenu.innerHTML = '<i class="bx bx-x"></i>';
+		} else {
+			mobileMenu.innerHTML = '<i class="bx bx-menu"></i>';
+		}
+	});
+</script>
