@@ -1,5 +1,6 @@
 {
-  "name": "blocklycode",
+  "name": "infinlabs",
+  "description": "Infinlabs utils",
   "version": "0.1.1",
   "main": "index.ts",
   "type": "module",
