@@ -9,10 +9,10 @@ export interface Props {
     canonical?: string;
     noindex?: boolean;
     nofollow?: boolean;
-    
+    plausible_domain?: string;
 }
 
-const { title, page, suffix, description = "Learning to code? Well then InfinLabs is just for you! We have a drag and drop system to make coding fun and simple!", icon = "https://resources.infinlabs.org/assets/favicon.png" } = Astro.props as Props;
+const { title, page, suffix, canonical, noindex = false, nofollow = false, plausible_domain = "infinlabs.org", description = "Learning to code? Well then InfinLabs is just for you! We have a drag and drop system to make coding fun and simple!", icon = "https://resources.infinlabs.org/assets/favicon.png" } = Astro.props as Props;
 
 const site_name = suffix ? suffix + " - InfinLabs" : "InfinLabs";
 const page_title = title + " - " + suffix;
@@ -26,11 +26,12 @@ const page_title = title + " - " + suffix;
     <meta name="title" content={page_title}>
     <meta name="description" content={description}>
     <meta name="keywords" content="Blockly, Code, Discord, Bot, Hosting, Discord Bot, Discord Hosting, Free, Coding, Lab, InfinLabs, Infin">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content={(noindex ? "noindex" : "index") + (nofollow ? ", nofollow" : "")}>
     <meta name="language" content="English">
     <meta name="author" content={site_name}>
     <meta name="theme-color" content="#458fd9">
     <meta name="generator" content={Astro.generator} />
+    <meta name="application-name" content={site_name}>
     
     <!-- Open Graph / Facebook -->
     <meta property="og:locale" content="en_US">
@@ -50,7 +51,15 @@ const page_title = title + " - " + suffix;
     
     <link rel="icon" href={icon}>
     <link rel="stylesheet" href="https://resources.infinlabs.org/styles/global.css">
+    <link rel="canonical" href={canonical ?? Astro.request.url} />
     <title>{title} {" - "} {suffix}</title>
+
+    <script defer data-domain={plausible_domain} src="https://plausible.infinlabs.org/js/script.outbound-links.pageview-props.tagged-events.js"></script>
+    <script>
+        /* @ts-ignore */
+        window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }
+    </script>
+
 
     <slot />
 </head>
