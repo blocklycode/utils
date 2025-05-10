@@ -1,7 +1,13 @@
 ---
 
-export interface Props {}
-const { } = Astro.props;
+export type Props = {
+    version?: string;
+    versionType?: "stable" | "beta" | "alpha";
+    use_beta_urls?: boolean;
+}
+const { version, versionType, use_beta_urls } = Astro.props;
+
+const base_url = use_beta_urls ? "https://beta.infinlabs.org" : "https://www.infinlabs.org";
 
 ---
 
@@ -15,36 +21,37 @@ const { } = Astro.props;
         <div class="social">
             <ul role="list" aria-label="Social Links">
                 <li><a href="https://social.infinlabs.org/discord" aria-label="Discord server"><i class="bx bxl-discord-alt" aria-hidden="true"></i></a></li>
-                <li><a href="https://twiter.com/@Blockly_Code" aria-label="Twitter"><i class="bx bxl-twitter" aria-hidden="true"></i></a></li>
+                <li><a href="https://twitter.com/@Blockly_Code" aria-label="Twitter"><i class="bx bxl-twitter" aria-hidden="true"></i></a></li>
                 <li><a href="https://youtube.com/@Blockly_Code" aria-label="Youtube"><i class="bx bxl-youtube" aria-hidden="true"></i></a></li>
                 <li><a href="https://twitch.tv/infinlabs" aria-label="Twitch"><i class="bx bxl-twitch" aria-hidden="true"></i></a></li>
                 <li><a href="mailto:contact@infinlabs.org" aria-label="Email"><i class="bx bx-envelope" aria-hidden="true"></i></a></li>
             </ul>
         </div>
         <div class="version">
-            <p>You are using InfinLabs 4.0 <span class="alpha">Alpha</span></p>
-            <a href="https://www.infinlabs.org/updates#4-0-0">Changelog</a>
+            <p>You are using InfinLabs {version ?? "4.0"} {versionType && versionType !== "stable" ? <span class={versionType}>{versionType}</span> : ""}</p>
+            <a href={base_url + "updates#" + (version ?? "4.0.0")}>Changelog</a>
         </div>
     </div>
     <div class="section">
         <nav class="nav" aria-label="Footer">
             <ul role="list">
-                <li><a href="https://www.infinlabs.org/">Home</a></li>
+                <li><a href={base_url + ""}>Home</a></li>
+                <li><a href={base_url + "about"}>About Us</a></li>
                 <li><a href="https://lab.infinlabs.org/">My Projects</a></li>
-                <li><a href="https://www.infinlabs.org/features">Features</a></li>
+                <li><a href={base_url + "features"}>Features</a></li>
                 <li><a href="https://docs.infinlabs.org/">Documentation</a></li>
                 <li><a href="https://status.infinlabs.org">System Status</a></li>
                 <li><a href="https://feedback.infinlabs.org/">Feedback</a></li>
                 <li><a href="https://feedback.infinlabs.org/bugs/new">Bug Report</a></li>
-                <li><a href="https://www.infinlabs.org/legal/terms">Terms of Service</a></li>
-                <li><a href="https://www.infinlabs.org/legal/acceptable">Acceptable Use Policy</a></li>
-                <li><a href="https://www.infinlabs.org/legal/privacy">Privacy Policy</a></li>
-                <li><a href="https://www.infinlabs.org/legal/cookie">Cookie Policy</a></li>
+                <li><a href={base_url + "legal/terms"}>Terms of Service</a></li>
+                <li><a href={base_url + "legal/acceptable"}>Acceptable Use Policy</a></li>
+                <li><a href={base_url + "legal/privacy"}>Privacy Policy</a></li>
+                <li><a href={base_url + "legal/cookie"}>Cookie Policy</a></li>
             </ul>
         </nav>
     </div>
     <div class="section">
-        <p class="copyright">&copy; Copyright Blockly Code 2021 - {new Date().getFullYear()}. All rights reserved</p>
+        <p class="copyright">&copy; Copyright InfinLabs 2021 - {new Date().getFullYear()}. All rights reserved</p>
     </div>
 </footer>
 
@@ -95,6 +102,8 @@ const { } = Astro.props;
         margin-top: auto;
     }
     .version p {
+        font-size: var(--bc-fs-300);
+        font-weight: 200;
         color: var(--bc-clr-text-600);
     }
     .version a {
@@ -114,8 +123,7 @@ const { } = Astro.props;
         padding: .3rem .5rem;
         display: inline-block;
         line-height: 1;
-        /* font-weight: 800; */
-        font-size: var(--bc-fs-300);
+        font-size: var(--bc-fs-100);
         color: rgb(var(--_rgb));
     }
 
