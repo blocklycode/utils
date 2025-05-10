@@ -26,13 +26,12 @@ const { title, items } = Astro.props as Props;
 
 ---
 
-<header id="header">
+<header class="flex v-center">
     <div class="logo">
-        <img src="https://resources.infinlabs.org/assets/banner.png" alt="InfinLabs Logo">
-        <h1>InfinLabs</h1>
+        <img src="https://resources.infinlabs.org/assets/logo.png" alt="InfinLabs Logo">
     </div>
     <nav>
-        <ul class="nav-links">
+        <ul class="nav-links | flex gap-300">
             {items.map(item => {
                 if (item.type === "link") {
                     return <li class="nav-item">
@@ -56,9 +55,9 @@ const { title, items } = Astro.props as Props;
             <i class='bx bx-menu'></i>
         </div>
     </nav>
-    <div>
+    <div class="push-right">
 		<Button theme="cta" href="https://app.infinlabs.org" text="Get Started" />
-        <!-- <Account -->
+        <!-- <Account /> -->
     </div>
 </header>
 
@@ -66,13 +65,14 @@ const { title, items } = Astro.props as Props;
 
     header {
 		padding: 1.5rem 3rem;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
 		position: fixed;
-		width: 100%;
 		z-index: 100;
+		width: 100%;
 		transition: background-color 0.3s ease;
+
+		@media (width > 768px) {
+			justify-content: space-between;
+		}
 
         --gradient-primary: linear-gradient(135deg, var(--bc-clr-primary-400), var(--bc-clr-secondary-400));
 	}
@@ -83,35 +83,19 @@ const { title, items } = Astro.props as Props;
 		box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 	}
 
-	.logo {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-	}
-
-	.logo img {
-		height: 3rem;
-	}
-
-	.logo h1 {
-		font-size: var(--bc-fs-600);
-		background: var(--gradient-primary);
-		background-clip: text;
-		-webkit-background-clip: text;
-		color: transparent;
-		font-weight: 700;
+	img {
+		height: 6.6rem;
 	}
 
 	nav ul {
-		display: flex;
-		gap: 2rem;
+		margin: 0;
 		list-style: none;
 	}
 
 	nav a {
-		font-size: var(--bc-fs-400);
 		position: relative;
-		transition: color 0.3s ease;
+		font-size: var(--bc-fs-400);
+		transition: .3s ease;
 	}
 
 	nav a:is(:hover, :focus-visible) {
@@ -121,13 +105,13 @@ const { title, items } = Astro.props as Props;
 
 	nav a::after {
 		content: '';
+		background: var(--gradient-primary);
 		position: absolute;
-		width: 0;
-		height: 2px;
 		bottom: -5px;
 		left: 0;
-		background: var(--gradient-primary);
-		transition: width 0.3s ease;
+		width: 0;
+		height: 2px;
+		transition: .3s ease;
 	}
 
 	nav a:is(:hover, :focus-visible)::after {
@@ -146,18 +130,23 @@ const { title, items } = Astro.props as Props;
 			padding: 1rem 2rem;
 		}
 
+		img {
+			height: 4.6rem;
+		}
+
 		.nav-links {
+			background: rgba(0,0,0,0.7);
+			backdrop-filter: blur(4px);
 			position: fixed;
 			top: 0;
 			right: -100%;
-			width: 70%;
-			height: 100vh;
-			background: var(--bc-clr-dark-800);
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			transition: right 0.3s ease;
 			z-index: 100;
+			flex-direction: column;
+			align-items: end;
+			width: 20rem;
+			height: 100vh;
+			transition: .3s ease;
+			
 		}
 
 		.nav-links.active {
@@ -167,11 +156,6 @@ const { title, items } = Astro.props as Props;
 		.mobile-menu-toggle {
 			display: block;
 			z-index: 101;
-		}
-
-		.cta-button {
-			width: 100%;
-			max-width: 300px;
 		}
 	}
 </style>
@@ -196,6 +180,13 @@ const { title, items } = Astro.props as Props;
 			mobileMenu.innerHTML = '<i class="bx bx-x"></i>';
 		} else {
 			mobileMenu.innerHTML = '<i class="bx bx-menu"></i>';
+		}
+	});
+
+	document.addEventListener("click", e => {
+		const target = e.target as HTMLElement;
+		if (!target.closest(".nav-links") && !target.closest(".mobile-menu-toggle")) {
+			navLinks.classList.remove("active");
 		}
 	});
 </script>
