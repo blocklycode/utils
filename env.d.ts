@@ -10,6 +10,7 @@ declare namespace App {
 
 interface ImportMetaEnv {
     readonly DB_URL: string;
+    readonly DB_URL2: string;
 }
 interface ImportMeta {
     readonly env: ImportMetaEnv;
