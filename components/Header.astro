@@ -26,7 +26,7 @@ const { title, items } = Astro.props as Props;
 
 ---
 
-<header class="flex v-center">
+<header id="header" class="flex v-center gap-200">
     <div class="logo">
         <img src="https://resources.infinlabs.org/assets/logo.png" alt="InfinLabs Logo">
     </div>
@@ -55,8 +55,8 @@ const { title, items } = Astro.props as Props;
             <i class='bx bx-menu'></i>
         </div>
     </nav>
-    <div class="push-right">
-		<Button theme="cta" href="https://app.infinlabs.org" text="Get Started" />
+    <div class="get-started">
+		<Button theme="cta" href="https://lab.infinlabs.org" text="Get Started" />
         <!-- <Account /> -->
     </div>
 </header>
@@ -156,6 +156,10 @@ const { title, items } = Astro.props as Props;
 		.mobile-menu-toggle {
 			display: block;
 			z-index: 101;
+		}
+
+		.get-started {
+			margin-left: auto;
 		}
 	}
 </style>
