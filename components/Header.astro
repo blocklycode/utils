@@ -73,8 +73,6 @@ const { title, items } = Astro.props as Props;
 		@media (width > 768px) {
 			justify-content: space-between;
 		}
-
-        --gradient-primary: linear-gradient(135deg, var(--bc-clr-primary-400), var(--bc-clr-secondary-400));
 	}
 
 	header.scrolled {
@@ -105,7 +103,7 @@ const { title, items } = Astro.props as Props;
 
 	nav a::after {
 		content: '';
-		background: var(--gradient-primary);
+		background: var(--bc-grad-primary);
 		position: absolute;
 		bottom: -5px;
 		left: 0;
