@@ -179,9 +179,9 @@ const { title, items } = Astro.props as Props;
 	mobileMenu.addEventListener("click", () => {
 		navLinks.classList.toggle("active");
 		if (navLinks.classList.contains("active")) {
-			mobileMenu.innerHTML = '<i class="bx bx-x"></i>';
+			(mobileMenu.querySelector("i") as HTMLElement).classList = "bx bx-x";
 		} else {
-			mobileMenu.innerHTML = '<i class="bx bx-menu"></i>';
+			(mobileMenu.querySelector("i") as HTMLElement).classList = "bx bx-menu";
 		}
 	});
 
@@ -189,6 +189,7 @@ const { title, items } = Astro.props as Props;
 		const target = e.target as HTMLElement;
 		if (!target.closest(".nav-links") && !target.closest(".mobile-menu-toggle")) {
 			navLinks.classList.remove("active");
+			(mobileMenu.querySelector("i") as HTMLElement).classList = "bx bx-menu";
 		}
 	});
 </script>

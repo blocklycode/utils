@@ -108,7 +108,9 @@ const { text, loader = false, theme, type = "button", disabled = false, href, ta
         height: 24px;
         animation: s__loader_rotate 1s linear infinite;
         transition: .3s;
-        opacity: 0
+        opacity: 0;
+        rotate: 90deg;
+        transform: translateX(-.5rem);
     }
     .loader::before, .loader::after {
         content: "";
