@@ -21,7 +21,7 @@ type APIBaseResponse<T> = {
     data: T;
     message: string;
 }
-type APISuccessResponse<T> = Omit<APIBaseResponse<T>, "message"> & {
+type APISuccessResponse<T> = APIBaseResponse<T> & {
     code: 0;
 }
 type APIErrorResponse<T> = APIBaseResponse<T> & {
