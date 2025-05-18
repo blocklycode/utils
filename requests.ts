@@ -16,14 +16,6 @@ type APIOptions = {
     version?: string;
 }
 
-
-type APIRequest = {
-    path: string;
-    method: Method;
-    body: any;
-    options: APIOptions;
-}
-
 type APIBaseResponse<T> = {
     code: number;
     data: T;
@@ -47,7 +39,7 @@ type APIResponse<T> = APISuccessResponse<T> | APIErrorResponse<T> | APIFieldResp
  * Sends a request to the API
  * https://api.infinlabs.org/v1/${path}
  */
-export async function send<T>({path, method, body, options}:APIRequest):Promise<APIResponse<T>> {
+export async function send<T>(path: string, method: Method, body: any, options?: APIOptions):Promise<APIResponse<T>> {
     let token;
     for (let x of document.cookie.split(';')) {
         if (x.includes('token_active=')) {
