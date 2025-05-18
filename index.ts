@@ -3,4 +3,6 @@ import * as types from './types';
 import * as components from './components';
 import * as auth from './auth';
 
-export { db, types, components, auth };
+import * as requests from './requests';
+
+export { db, types, components, auth, requests };

@@ -1,4 +1,53 @@
-export async function send(path:string, body:any, provided_token?:string) {
+export enum Method {
+    CREATE = "put",
+    RETRIEVE = "get",
+    LIST = "get",
+    UPDATE = "patch",
+
+    GET = "get",
+    POST = "post",
+    PATCH = "patch",
+    PUT = "put",
+    DELETE = "delete"
+}
+
+type APIOptions = {
+    token?: string;
+    version?: string;
+}
+
+
+type APIRequest = {
+    path: string;
+    method: Method;
+    body: any;
+    options: APIOptions;
+}
+
+type APIBaseResponse<T> = {
+    code: number;
+    data: T;
+}
+type APISuccessResponse<T> = APIBaseResponse<T> & {
+    code: 0;
+}
+type APIErrorResponse<T> = APIBaseResponse<T> & {
+    message: string;
+    error?: string;
+}
+type APIFieldResponse<T> = APIErrorResponse<T> & {
+    code: 9 | 10;
+    field: string;
+}
+
+type APIResponse<T> = APISuccessResponse<T> | APIErrorResponse<T> | APIFieldResponse<T>;
+
+
+/**
+ * Sends a request to the API
+ * https://api.infinlabs.org/v1/${path}
+ */
+export async function send<T>({path, method, body, options}:APIRequest):Promise<APIResponse<T>> {
     let token;
     for (let x of document.cookie.split(';')) {
         if (x.includes('token_active=')) {
@@ -7,13 +56,13 @@ export async function send(path:string, body:any, provided_token?:string) {
         }
     }
     try {
-        let request = await fetch(`https://internal.blocklycode.org/${path}`, {
-            method: 'POST',
+        let request = await fetch(`https://api.infinlabs.org/${options?.version ?? "v1"}/${path}`, {
+            method: method,
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/json',
                 'Allow': 'application/json',
-                'Authorization': provided_token ?? token ?? "",
+                'Authorization': options?.token ?? token ?? "",
             },
             body: JSON.stringify(body)
         });
@@ -23,53 +72,8 @@ export async function send(path:string, body:any, provided_token?:string) {
         } else {
             data = await request.text();
         }
-        return {status: request.status, data}
+        return data
     } catch (e) {
-        return {status: 500, data: e}
-    }
-}
-
-export async function upload(file:string, name:string, path:string) {
-    try {
-        let request = await fetch(`https://cdn.blocklycode.org/upload`, {
-            method: 'POST',
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json',
-                'Allow': 'application/json',
-            },
-            body: JSON.stringify({path, name, file})
-        });
-        if (request.ok) {
-            let data = await request.json();
-            return {status: 200, url: data.url}
-        } else {
-            let data = await request.text();
-            return {status: request.status, data}
-        }
-    } catch (e) {
-        return {status: 500, data: e}
-    }
-}
-export async function listfiles(folder:string) {
-    try {
-        let request = await fetch(`https://cdn.blocklycode.org/list`, {
-            method: 'POST',
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json',
-                'Allow': 'application/json',
-            },
-            body: JSON.stringify({folder})
-        });
-        if (request.ok) {
-            let data = await request.json();
-            return {status: 200, data}
-        } else {
-            let data = await request.text();
-            return {status: request.status, data}
-        }
-    } catch (e) {
-        return {status: 500, data: e}
+        return {code: -1, message: "request failed", data: e as T}
     }
 }
