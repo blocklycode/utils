@@ -19,12 +19,12 @@ type APIOptions = {
 type APIBaseResponse<T> = {
     code: number;
     data: T;
+    message: string;
 }
-type APISuccessResponse<T> = APIBaseResponse<T> & {
+type APISuccessResponse<T> = Omit<APIBaseResponse<T>, "message"> & {
     code: 0;
 }
 type APIErrorResponse<T> = APIBaseResponse<T> & {
-    message: string;
     error?: string;
 }
 type APIFieldResponse<T> = APIErrorResponse<T> & {
