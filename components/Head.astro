@@ -15,7 +15,7 @@ export interface Props {
 const { title, page, suffix, canonical, noindex = false, nofollow = false, plausible_domain = "infinlabs.org", description = "Learning to code? Well then InfinLabs is just for you! We have a drag and drop system to make coding fun and simple!", icon = "https://resources.infinlabs.org/assets/favicon.png" } = Astro.props as Props;
 
 const site_name = suffix ? suffix + " - InfinLabs" : "InfinLabs";
-const page_title = suffix ? title + " - " + suffix : title;
+const page_title = suffix ? title + " - " + suffix : `${title} - InfinLabs`;
 
 ---
 <head>
